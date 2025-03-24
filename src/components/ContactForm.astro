@@ -44,8 +44,17 @@
     ></textarea>
   </div>
   
+  <!--<a-->
+  <!--  onclick="sendEmail()"-->
+  <!--  class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-4 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all transform hover:scale-[1.02] shadow-lg"-->
+  <!--&gt;-->
+  <!--  Send Message-->
+  <!--</a>-->
+
   <button
-    class="submit w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-4 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all transform hover:scale-[1.02] shadow-lg"
+      id="submit-btn"
+      onsubmit="sendEmail();"
+      class="submit w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-4 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all transform hover:scale-[1.02] shadow-lg"
   >
     Send Message
   </button>
@@ -53,36 +62,72 @@
 
 <script>
   // Find all buttons with the `alert` class on the page.
-  const buttons = document.querySelectorAll('button.submit');
+  // const buttons = document.querySelectorAll('button.submit');
+  //
+  // // Handle clicks on each button.
+  // buttons.forEach((button) => {
+  //   button.addEventListener('click', () => {
+  //     let form = document.forms[0];
+  //
+  //     let inputName = form.querySelector('input#name');
+  //     let inputBusiness = form.querySelector('input#business');
+  //     let inputEmail = form.querySelector('input#email');
+  //     let inputMessage = form.querySelector('textarea#message');
+  //
+  //     let valueName = inputName.value;
+  //     let valueBusiness = inputBusiness.value;
+  //     let valueEmail = inputEmail.value;
+  //     let valueMessage = inputMessage.value;
+  //
+  //     const response = fetch("./.netlify/functions/triggerEmail", {
+  //       method: "POST",
+  //       body: JSON.stringify({
+  //         formEmail: valueEmail,
+  //         formName: valueName,
+  //         formBusiness: valueBusiness,
+  //         formMessage: valueMessage,
+  //       })
+  //     }).then(response =>
+  //         response.status === 200 ?
+  //             alert('Message sent') :
+  //             alert('A problem occurred. Please email contact@timelyo.com')
+  //     );
+  //   });
+  // });
 
-  // Handle clicks on each button.
-  buttons.forEach((button) => {
-    button.addEventListener('click', () => {
-      let form = document.forms[0];
+  document
+      .getElementById("submit-btn")
+      .addEventListener("click", function (event) {
+        event.preventDefault();
+        sendEmail();
+      });
 
-      let inputName = form.querySelector('input#name');
-      let inputBusiness = form.querySelector('input#business');
-      let inputEmail = form.querySelector('input#email');
-      let inputMessage = form.querySelector('textarea#message');
+  async function sendEmail() {
+    let form = document.forms[0];
 
-      let valueName = inputName.value;
-      let valueBusiness = inputBusiness.value;
-      let valueEmail = inputEmail.value;
-      let valueMessage = inputMessage.value;
+    let inputName = form.querySelector('input#name');
+    let inputBusiness = form.querySelector('input#business');
+    let inputEmail = form.querySelector('input#email');
+    let inputMessage = form.querySelector('textarea#message');
 
-      const response = fetch("./.netlify/functions/triggerEmail", {
-        method: "POST",
-        body: JSON.stringify({
-          formEmail: valueEmail,
-          formName: valueName,
-          formBusiness: valueBusiness,
-          formMessage: valueMessage,
-        })
-      }).then(response =>
-          response.status === 200 ?
-              alert('Message sent') :
-              alert('A problem occurred. Please email contact@timelyo.com')
-      );
+    let valueName = inputName.value;
+    let valueBusiness = inputBusiness.value;
+    let valueEmail = inputEmail.value;
+    let valueMessage = inputMessage.value;
+
+    const response = await fetch("./.netlify/functions/triggerEmail", {
+      method: "POST",
+      body: JSON.stringify({
+        formEmail: valueEmail,
+        formName: valueName,
+        formBusiness: valueBusiness,
+        formMessage: valueMessage,
+      })
     });
-  });
+
+    response.status === 200 ?
+        alert('Message sent') :
+        alert('A problem occurred. Please email contact@timelyo.com')
+  }
+
 </script>
